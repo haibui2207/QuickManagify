@@ -1,0 +1,31 @@
+{
+  "name": "quickmanagify",
+  "version": "1.0.0",
+  "description": "the tool to facilitate the ecommerce management such as products, orders",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/api/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quickmanagify/QuickManagify.git"
+  },
+  "keywords": [
+    "ecommerce",
+    "tools",
+    "nodejs",
+    "graphql",
+    "apollo"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/quickmanagify/QuickManagify/issues"
+  },
+  "homepage": "https://github.com/quickmanagify/QuickManagify#readme",
+  "dependencies": {
+    "apollo-server": "^2.4.2",
+    "graphql": "^14.1.1"
+  }
+}
