@@ -1,44 +1,36 @@
 const { ApolloServer, gql } = require('apollo-server');
-
-// This is a (sample) collection of books we'll be able to query
-// the GraphQL server for.  A more complete example might fetch
-// from an existing data source like a REST API or database.
-const books = [
-  {
-    title: 'Harry Potter and the Chamber of Secrets',
-    author: 'J.K. Rowling',
-  },
-  {
-    title: 'Jurassic Park',
-    author: 'Michael Crichton',
-  },
-];
+const fs = require('fs');
+const path = require('path');
+let typeDefAsString = '';
+const typeDefsPath = path.resolve(__dirname, 'typeDefs');
+const files = fs.readdirSync(typeDefsPath);
+files.forEach((file) => {
+  const filePath = path.resolve(typeDefsPath, file);
+  const def = require(filePath);
+  typeDefAsString += def;
+});
+const inputDefsPath = path.resolve(__dirname, 'inputDefs');
+const inputFiles = fs.readdirSync(inputDefsPath);
+inputFiles.forEach((file) => {
+  const filePath = path.resolve(inputDefsPath, file);
+  const def = require(filePath);
+  typeDefAsString += def;
+});
+const operationsPath = path.resolve(__dirname, 'operations');
+const operationFiles = fs.readdirSync(operationsPath);
+operationFiles.forEach((file) => {
+  const filePath = path.resolve(operationsPath, file);
+  const def = require(filePath);
+  typeDefAsString += def;
+});
 
 // Type definitions define the "shape" of your data and specify
 // which ways the data can be fetched from the GraphQL server.
-const typeDefs = gql`
-  # Comments in GraphQL are defined with the hash (#) symbol.
-
-  # This "Book" type can be used in other type declarations.
-  type Book {
-    title: String
-    author: String
-  }
-
-  # The "Query" type is the root of all GraphQL queries.
-  # (A "Mutation" type will be covered later on.)
-  type Query {
-    books: [Book]
-  }
-`;
+const typeDefs = gql`${typeDefAsString}`;
 
 // Resolvers define the technique for fetching the types in the
 // schema.  We'll retrieve books from the "books" array above.
-const resolvers = {
-  Query: {
-    books: () => books,
-  },
-};
+const resolvers = require('./resolvers').resolve;
 
 // In the most basic sense, the ApolloServer can be started
 // by passing type definitions (typeDefs) and the resolvers
